@@ -1,0 +1,53 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Todo</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="logout-container">
+        {% if user.is_authenticated %}
+            <form action="{% url 'todo:logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="logout-button" title="Logout">
+                    <i class="fa-solid fa-right-from-bracket logout-icon"></i>
+                </button>
+             </form>
+        {% else %}
+              <a href="{% url 'todo:login' %}" class="login-btn"> Login </a>
+        {%endif %}
+    </div>
+
+    <div class="signup-login">
+        <div class="signup-box">
+            <h3 class="user-greeting">Hello {{ user }}</h3>
+
+            <h2>Get Things Done?</h2>
+
+            <form method="post">
+                {% csrf_token %}
+                <input type="text" class="inp" name="title" required placeholder="Add Today's Task?">
+                <input type="submit" class="submit-button" value="Add Task">
+            </form>
+
+            <div class="task-container">
+                {% for todo in res %}
+                <div class="task-list">
+                    <div class="task-left">
+                        <span class="task-id">{{ todo.srno }}</span>
+                        <span class="task-title">{{ todo.title }}</span>
+                    </div>
+                    <div class="task-actions">
+                        <a href="{% url 'todo:edit_task' srno=todo.srno %}"><i class="fa-solid fa-pen"></i></a>
+                        <a href="{% url 'todo:delete_task' srno=todo.srno %}"><i class="fa-solid fa-trash"></i></a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</body>
+</html>

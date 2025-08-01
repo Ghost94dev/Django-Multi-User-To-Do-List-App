@@ -1,0 +1,38 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Edit Task</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
+</head>
+<body>
+    <div class="signup-login">
+        <div class="signup-box">
+            <h2>Edit Task</h2>
+            {% if messages %}
+                {% for message in messages %}
+                 <div class="alert alert-{{ message.tags}}">
+                      {{ message }}
+                 </div>
+            {%endfor%}
+            {%endif%}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="field">
+                  <input type="text" name="title" value="{{ task.title }}" required class="inp">
+                </div>
+                <div class="form-actions">
+                    <button type="submit" class="submit-button">
+                        <i class="fa-solid fa-floppy-disk"></i> Update Task
+                    </button>
+                    <a href="{% url 'todo:todo' %}" class="cancel-btn">
+                        <i class="fa-solid fa-xmark"></i> Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>
