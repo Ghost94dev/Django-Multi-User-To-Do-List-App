@@ -8,6 +8,13 @@
     <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
 </head>
 <body>
+
+    <div class="theme-toggle-container">
+        <button id="theme-toggle" class="theme-toggle-btn">
+            <i class="fa-solid fa-moon"></i>
+        </button>
+    </div>
+
     <div class="logout-container">
         {% if user.is_authenticated %}
             <form action="{% url 'todo:logout' %}" method="post">
@@ -30,6 +37,21 @@
             <form method="post">
                 {% csrf_token %}
                 <input type="text" class="inp" name="title" required placeholder="Add Today's Task?">
+
+                <!-- CATEGORY SELECTOR -->
+                <div class="field">
+                    <select name="category" class="inp" required>
+                        <option value="" selected disabled>Select Category</option>
+                        {% for cat in categories %}
+                        <option value="{{ cat.id }}" style="color: white;">{{ cat.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <!-- New due date field -->
+                <div class="field">
+                    <input type="datetime-local" class="inp" name="due_date">
+                </div>
+
                 <input type="submit" class="submit-button" value="Add Task">
             </form>
 
@@ -39,6 +61,11 @@
                     <div class="task-left">
                         <span class="task-id">{{ todo.srno }}</span>
                         <span class="task-title">{{ todo.title }}</span>
+                        {% if todo.category %}
+                        <span class="category-badge" style="background-color: {{ todo.category.color }}">
+                            {{ todo.category.name }}
+                        </span>
+                        {% endif %}
                     </div>
                     <div class="task-actions">
                         <a href="{% url 'todo:edit_task' srno=todo.srno %}"><i class="fa-solid fa-pen"></i></a>
@@ -49,5 +76,35 @@
             </div>
         </div>
     </div>
+
+      <script>
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        const icon = themeToggle.querySelector('i');
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+
+        // Set initial icon
+        if (savedTheme === 'dark') {
+            icon.classList.replace('fa-moon', 'fa-sun');
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+
+            // Toggle icon
+            if (newTheme === 'dark') {
+                icon.classList.replace('fa-moon', 'fa-sun');
+            } else {
+                icon.classList.replace('fa-sun', 'fa-moon');
+            }
+        });
+    </script>
 </body>
 </html>

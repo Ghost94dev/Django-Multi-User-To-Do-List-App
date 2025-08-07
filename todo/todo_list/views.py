@@ -6,12 +6,16 @@ from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import get_object_or_404
 
+from datetime import timedelta
+
 from todo_list import models
-from todo_list.models import TODOO
+from todo_list.models import TODOO, Category
+from todo_list.forms import  TodoForm
 
 from django.contrib.auth import authenticate, login as django_login
 from django.contrib.auth.views import LogoutView
 from django.urls import reverse_lazy
+from unicodedata import category
 
 User = get_user_model()
 
@@ -78,15 +82,46 @@ def user_login(request):
 
     return render(request, 'login.html')
 
+
 @login_required(login_url='todo:login')
 def todo(request):
-    if request.method== 'POST':
+    categories = Category.objects.all()
+    if request.method == 'POST':
         title = request.POST.get('title').strip()
-        print(title)
-        if title:
-            obj=models.TODOO(title=title, user=request.user)
+        category_id = request.POST.get('category')
+        due_date_str = request.POST.get('due_date')  # Get due date from form
+
+        if title:  # Only proceed if title exists
+            obj = models.TODOO(title=title, user=request.user, due_date=due_date_str if due_date_str else None)
+
+            if category_id:
+                try:
+                    obj.category = Category.objects.get(id=category_id)
+                except Category.DoesNotExist:
+                    messages.error(request, "Invalid category selected!")
+                    return redirect('todo:todo')
+
             obj.save()
+
+            # Schedule reminder if due_date exists
+            if obj.due_date:
+                from .tasks import send_reminder
+                reminder_time = obj.due_date - timedelta(hours=1)  # 1 hour before
+                send_reminder.apply_async(
+                    args=[obj.srno],  # Using srno as identifier
+                    eta=reminder_time
+                )
+                obj.reminder = reminder_time
+                obj.save()
             messages.success(request, "Task added successfully!")
-        return redirect('todo:todo')
-    res=models.TODOO.objects.filter(user=request.user).order_by('-date') # filtering todo for the connected user
-    return render(request,'todo.html',{'res':res})
+            return redirect('todo:todo')
+        else:
+            messages.error(request, "Task title cannot be empty!")
+            return redirect('todo:todo')
+
+    # GET request handling (properly indented now)
+    res = models.TODOO.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'todo.html', {'res': res, 'categories': categories, 'form': TodoForm()})
+
+
+

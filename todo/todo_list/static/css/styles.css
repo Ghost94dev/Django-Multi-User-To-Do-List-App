@@ -1,14 +1,43 @@
 /* styles.css */
 
+:root {
+    --bg-color: #f5f5f5;
+    --text-color: #333;
+    --card-bg: #fff;
+    --border-color: #ddd;
+    --primary-color: #4a6fa5;
+    --secondary-color: #f8f9fa;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --error-color: #f44336;
+    --success-color: #4caf50;
+    --warning-color: #ff9800;
+    --text-muted: #666;
+    --category-color: #6c757d; /* Light mode color */
+}
+
+[data-theme="dark"] {
+    --bg-color: #121212;
+    --text-color: #f5f5f5;
+    --card-bg: #1e1e1e;
+    --border-color: #444;
+    --primary-color: #6c8fc7;
+    --secondary-color: #2d2d2d;
+    --shadow-color: rgba(0, 0, 0, 0.3);
+}
+
+
+
 body {
     margin: 0;
     padding: 0;
-    background-color: #0b2241;
+    background-color: var(--bg-color);
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     display: flex;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
+    color: var(--text-color);
+    transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Main centered container */
@@ -22,18 +51,18 @@ body {
 
 /* Rounded box */
 .signup-box {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: var(--card-bg);
     border-radius: 20px;
     padding: 30px;
     width: 350px;
-    box-shadow: 0 0 30px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 4px 6px var(--shadow-color);
     backdrop-filter: blur(15px);
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* Heading */
 .signup-box h2 {
-    color: white;
+    color: var(--text-color);
     margin: 0 0 20px 0;
     text-align: center;
     font-size: 1.8rem;
@@ -44,7 +73,7 @@ body {
 
 /* User greeting */
 .user-greeting {
-    color: white;
+    color: var(--text-color);
     margin: 0 0 15px 0;
     font-size: 1.2rem;
 }
@@ -52,18 +81,20 @@ body {
 /* Input field */
 .inp {
     width: 100%;
-    padding: 12px 15px;
+    padding: 11px 10px;
     border-radius: 8px;
     border: none;
     margin-bottom: 15px;
     font-size: 1rem;
     outline: none;
-    background-color: rgba(255, 255, 255, 0.1);
-    color: white;
+    background-color: var(--card-bg);
+    color:var(--text-color);
+    border-color: var(--border-color);
 }
 
 .inp::placeholder {
-    color: #ccc;
+    color: var(--text-muted);
+    opacity: 1;
 }
 
 /* Submit button */
@@ -71,7 +102,7 @@ body {
     width: 100%;
     padding: 12px;
     border-radius: 8px;
-    background-color: #1e88e5;
+    background-color: var(--primary-color);
     color: white;
     font-size: 1rem;
     font-weight: 600;
@@ -82,7 +113,7 @@ body {
 }
 
 .submit-button:hover {
-    background-color: #1565c0;
+    background-color: color-mix(in srgb, var(--primary-color), black 15%);
 }
 
 /* Task container */
@@ -95,25 +126,30 @@ body {
 
 /* Individual task item */
 .task-list {
-    background-color: rgba(255, 255, 255, 0.1);
+    background-color: var(--card-bg);
     border-radius: 8px;
     padding: 12px 15px;
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
-    color: white;
+    color: var(--text-color);
+    backdrop-filter: blur(5px); /* Frosted glass effect */
+    border: 1px solid rgba(255,255,255,0.1);
+    border-color: var(--border-color);
 }
+
+
 
 .task-left {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     align-items: center;
 }
 
 .task-id {
     background-color: rgba(255, 255, 255, 0.2);
-    color: white;
+    color: var(--text-color);
     padding: 2px 8px;
     border-radius: 4px;
     font-size: 0.9rem;
@@ -122,6 +158,7 @@ body {
 .task-title {
     font-size: 1rem;
     font-weight: 500;
+    color: var(--text-color);
 }
 
 .task-actions a {
@@ -153,7 +190,7 @@ body {
 }
 
 .logout-button {
-    background: red;
+    background: var(--error-color);
     border: none;
     color: inherit;
     cursor: pointer;
@@ -170,12 +207,12 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: rgba(255, 255, 255, 0.05);
+    background: var(--secondary-color);
     border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: var(--primary-color);
     border-radius: 10px;
 }
 
@@ -183,8 +220,6 @@ body {
     background: rgba(255, 255, 255, 0.3);
 }
 
-
-/* Edit Task Specific Styles */
 .form-actions {
     display: flex;
     gap: 10px;
@@ -235,5 +270,153 @@ body {
 .delete-btn:hover {
     color: #d32f2f;
 }
+.category-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    margin-left: 8px;
+    color: white;
+    background-color: var(--category-color, #6c757d); /* default color */
+    vertical-align: middle;
+}
 
 
+select.inp {
+    width: 100%;
+    padding: 11px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 15px;
+    font-size: 1rem;
+    outline: none;
+    background-color: var(--card-bg);
+    color: var(--text-color);
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23666666' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 10px center;
+    background-size: 12px;
+    padding-right: 30px;
+    cursor: pointer;
+}
+
+/* Style for select options */
+select.inp option {
+    background-color: #A9A9A9;
+    color: red;
+    padding: 8px 12px;
+    margin: 5px 0;
+}
+
+/* Focus state background-color: rgba(255, 255, 255, 0.2);*/
+select.inp:focus {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 2px rgba(30, 136, 229, 0.2);
+
+}
+
+/* Placeholder styling */
+select.inp:invalid {
+    color: var(--text-muted);
+}
+
+select.inp option:hover {
+    background-color: #e0e0e0;
+
+}
+
+/* Selected option */
+select.inp option:checked,
+select.inp option:focus {
+    background-color: #4a6fa5;
+    color: white;
+}
+
+
+
+
+/* Specifically for datetime input */
+.inp[type="datetime-local"] {
+    /* Inherits all .inp styles automatically */
+    /* Custom additions for datetime picker */
+    position: relative;
+}
+
+/* Custom calendar icon */
+.inp[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.8); /* Makes icon white in dark theme */
+    padding-left: 10px; /* Adds spacing */
+    cursor: pointer;
+}
+
+/* Focus state */
+.inp[type="datetime-local"]:focus {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/*  styles for the theme toggle */
+.theme-toggle-container {
+    position: absolute;
+    top: 20px;
+    right: 80px;
+}
+
+.theme-toggle-btn {
+    background: var(--primary-color);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.1);
+    opacity: 0.9;
+
+}
+
+[data-theme="dark"] .category-badge {
+    opacity: 0.9;
+}
+
+[data-theme="dark"] {
+    color-scheme: dark;
+    --text-muted: #aaa;
+    --category-color: #495057;
+}
+
+[data-theme="dark"] .signup-box {
+    backdrop-filter: blur(10px);
+}
+
+[data-theme="dark"] select.inp {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%23aaaaaa' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+}
+
+/* Dark mode overrides */
+[data-theme="dark"] select.inp option {
+    background-color: #2d2d2d; /* Dark gray */
+    color: #f5f5f5; /* Light text */
+}
+
+[data-theme="dark"] select.inp option:hover {
+    background-color: #3d3d3d; /* Slightly lighter gray */
+}
+
+select.inp::-webkit-scrollbar {
+    width: 8px;
+}
+
+select.inp::-webkit-scrollbar-thumb {
+    background-color: var(--primary-color);
+    border-radius: 4px;
+}
