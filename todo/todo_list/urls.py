@@ -5,8 +5,7 @@ from django.contrib.auth.views import LogoutView
 app_name = "todo"
 
 urlpatterns = [
-    path('home', views.home, name='home'),
-    path('signup/', views.signup, name='signup'),
+    path('', views.signup, name='signup'),
     path('login/', views.user_login, name='login'),
     path('todo/', views.todo, name='todo'),
     path('delete/<int:srno>/', views.delete_task, name='delete_task'),

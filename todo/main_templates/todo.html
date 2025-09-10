@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Todo</title>
+    <title>Todo - {{ user.username }}</title>
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
     <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
 </head>
@@ -21,6 +21,7 @@
                 {% csrf_token %}
                 <button type="submit" class="logout-button" title="Logout">
                     <i class="fa-solid fa-right-from-bracket logout-icon"></i>
+                    Logout
                 </button>
              </form>
         {% else %}
@@ -30,9 +31,15 @@
 
     <div class="signup-login">
         <div class="signup-box">
-            <h3 class="user-greeting">Hello {{ user }}</h3>
+            <!-- Motivational Header -->
+            <div class="motivational-header">
+                <h1>Welcome back, {{ user.username }}! 👋</h1>
+                <p class="motivational-quote" id="motivationalQuote">
+                    "The secret of getting ahead is getting started." - Mark Twain
+                </p>
+            </div>
 
-            <h2>Get Things Done?</h2>
+            <h2>Get Things Done</h2>
 
             <form method="post">
                 {% csrf_token %}
@@ -43,7 +50,7 @@
                     <select name="category" class="inp" required>
                         <option value="" selected disabled>Select Category</option>
                         {% for cat in categories %}
-                        <option value="{{ cat.id }}" style="color: white;">{{ cat.name }}</option>
+                        <option value="{{ cat.id }}">{{ cat.name }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -77,7 +84,7 @@
         </div>
     </div>
 
-      <script>
+    <script>
         const themeToggle = document.getElementById('theme-toggle');
         const html = document.documentElement;
         const icon = themeToggle.querySelector('i');
@@ -105,6 +112,19 @@
                 icon.classList.replace('fa-sun', 'fa-moon');
             }
         });
+
+        const quotes = [
+            "Productivity is never an accident. It is always the result of a commitment to excellence, intelligent planning, and focused effort.",
+            "Your time is limited, so don't waste it living someone else's life.",
+            "The way to get started is to quit talking and begin doing.",
+            "It's not about having time, it's about making time.",
+            "Small daily improvements are the key to staggering long-term results.",
+            "Focus on being productive instead of busy.",
+            "Your future is created by what you do today, not tomorrow."
+        ];
+
+        document.getElementById('motivationalQuote').textContent =
+            '"' + quotes[Math.floor(Math.random() * quotes.length)] + '"';
     </script>
 </body>
 </html>

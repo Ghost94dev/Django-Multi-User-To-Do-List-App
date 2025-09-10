@@ -49,20 +49,31 @@ def edit_task(request, srno):
 def home(request):
     return HttpResponse("Hello, World!")
 
+
 def signup(request):
-    if request.method== 'POST':
-        fnm = request.POST.get('fnm')
-        emailid= request.POST.get('email')
-        pwd=request.POST.get('pwd')
-        if User.objects.filter(username=fnm).exists():
+    if request.method == 'POST':
+        username = request.POST.get('fnm')
+        email = request.POST.get('email')
+        password = request.POST.get('pwd')
+
+        if User.objects.filter(username=username).exists():
             messages.error(request, "Username already taken.")
-            return redirect('todo:signup')
-        print(fnm, emailid,pwd)
-        my_user= User.objects.create_user(fnm,emailid,pwd)
-        my_user.save()
-        messages.success(request, "Account created successfully!")
-        return redirect('todo:login')
-    return render(request,"signup.html")
+            return render(request, 'signup.html')
+
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Email already registered.")
+            return render(request, 'signup.html')
+
+        try:
+            my_user = User.objects.create_user(username=username, email=email, password=password)
+            my_user.save()
+            messages.success(request, "Account created successfully! Please login.")
+            return redirect('todo:login')
+        except Exception as e:
+            messages.error(request, f"Error creating account: {str(e)}")
+            return render(request, 'signup.html')
+
+    return render(request, "signup.html")
 
 
 def user_login(request):
@@ -70,18 +81,23 @@ def user_login(request):
         return redirect('todo:todo')
 
     if request.method == 'POST':
-        fnm = request.POST.get('fnm')
-        pwd = request.POST.get('pwd')
-        print(fnm, pwd)
-        userr =authenticate(request, username=fnm, password=pwd)
-        if userr is not None :
-            django_login(request, userr)
+        username = request.POST.get('fnm')
+        password = request.POST.get('pwd')
+        print(f"Attempting login with username: {username}")
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            django_login(request, user)
+            messages.success(request, f"Welcome back, {username}!")
             return redirect('todo:todo')
         else:
-            messages.error(request, "Invalid credentials")
+            # Check if username exists
+            if User.objects.filter(username=username).exists():
+                messages.error(request, "Invalid password")
+            else:
+                messages.error(request, "Username does not exist. Please sign up first.")
 
     return render(request, 'login.html')
-
 
 @login_required(login_url='todo:login')
 def todo(request):
