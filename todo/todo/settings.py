@@ -34,7 +34,7 @@ DEBUG = os.getenv("DJANGO_DEBUG", "False").lower() in ("true", "1", "yes")
 ALLOWED_HOSTS = [ "localhost",
     "127.0.0.1",
     os.getenv("RENDER_EXTERNAL_HOSTNAME", ""),
-    "todo-list-qns8.onrender.com",
+    "todo-list-1uub.onrender.com",
     ".onrender.com"]
 
 
@@ -71,7 +71,7 @@ ROOT_URLCONF = 'todo.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / "main_templates"],
+        'DIRS': [BASE_DIR / "templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
