@@ -9,7 +9,7 @@ DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 ALLOWED_HOSTS = [
     "localhost",
     "127.0.0.1",
-    "todo-list-1uub.onrender.com",
+    "todo-list-cyny.onrender.com",
     ".onrender.com"
 ]
 
